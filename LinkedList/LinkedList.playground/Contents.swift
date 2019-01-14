@@ -9,6 +9,7 @@ example(of: "creating and linking nodes") {
   node1.next = node2
   node2.next = node3
 
+  // Print 1 -> 2 -> 3
   print(node1)
 }
 
@@ -18,6 +19,7 @@ example(of: "push") {
   list.push(2)
   list.push(1)
 
+  // Print 1 -> 2 -> 3
   print(list)
 }
 
@@ -27,11 +29,15 @@ example(of: "inserting at a particular index") {
   list.push(2)
   list.push(1)
 
+  // Print "Before inserting: 1 -> 2 -> 3"
   print("Before inserting: \(list)")
+  
   var middleNode = list.node(at: 1)!
   for _ in 1...4 {
     middleNode = list.insert(-1, after: middleNode)
   }
+  
+  // Print "After inserting: 1 -> 2 -> -1 -> -1 -> -1 -> -1 -> 3"
   print("After inserting: \(list)")
 }
 
@@ -42,7 +48,9 @@ example(of: "pop") {
   list.push(1)
 
   print("Before popping list: \(list)")
+  
   let poppedValue = list.pop()
+  
   print("After popping list: \(list)")
   print("Popped value: " + String(describing: poppedValue))
 }

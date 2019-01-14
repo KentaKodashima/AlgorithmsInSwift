@@ -6,14 +6,15 @@ import Foundation
  2. tail - Tha last node
  
  Adding Operations:
- 1. push
- 2. append
- 3. insert(at after:)
+ 1. push O(1): Adds a value at the front of the list.
+ 2. append O(1): Adds a value at the end of the list.
+ 3. 1) node(at:) O(i): Tries to retrieve a node in the list based on the given index
+    2) insert(after:) O(1): Adds a value after a particular node of the list.
  
  Removing Operations:
- 1. pop
- 2. removeLast
- 3. remove(at after:)
+ 1. pop O(1): Removes the value at the front of the list.
+ 2. removeLast O(n): Removes the value at the end of the list.
+ 3. remove(after:) O(1): Removes a value anywhere in the list.
  */
 
 public struct LinkedList<Value> {
@@ -60,6 +61,7 @@ extension LinkedList: CustomStringConvertible {
     tail = tail!.next
   }
   
+  // Finding the particular node
   public func node(at index: Int) -> Node<Value>? {
     // 1 Create a ref to head
     var currentNode = head
@@ -83,7 +85,7 @@ extension LinkedList: CustomStringConvertible {
         append(value)
         return tail!
       }
-      // Create a new Node() with the value
+      // Create a new node with the value
       // Note: node.next means nil
       node.next = Node(value: value, next: node.next)
       return node.next!
@@ -91,6 +93,7 @@ extension LinkedList: CustomStringConvertible {
   
   @discardableResult
   public mutating func pop() -> Value? {
+    // defer will be garanteed to be executed right before return
     defer {
       head = head?.next
       if isEmpty {
@@ -102,15 +105,17 @@ extension LinkedList: CustomStringConvertible {
   
   @discardableResult
   public mutating func removeLast() -> Value? {
-    // 1
+    // This means the list is empty
     guard let head = head else {
       return nil
     }
-    // 2
+    // If head.next is nil, the list contains only one node.
     guard head.next != nil else {
       return pop()
     }
-    // 3
+    
+    // prev: It would be the node right before the last node
+    // current: It would be the last node
     var prev = head
     var current = head
     
@@ -118,7 +123,8 @@ extension LinkedList: CustomStringConvertible {
       prev = current
       current = next
     }
-    // 4
+    
+    // Since current is the last node, prev will be the new tail
     prev.next = nil
     tail = prev
     return current.value
@@ -130,6 +136,8 @@ extension LinkedList: CustomStringConvertible {
       if node.next === tail {
         tail = node
       }
+      // If node.next is tail, node.next would be nil, otherwise node is connected with node.next?.next
+      // As a result, the node which is in-between node and node.next.next is skipped (removed).
       node.next = node.next?.next
     }
     return node.next?.value
