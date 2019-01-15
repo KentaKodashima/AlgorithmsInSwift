@@ -15,6 +15,15 @@ import Foundation
  1. pop O(1): Removes the value at the front of the list.
  2. removeLast O(n): Removes the value at the end of the list.
  3. remove(after:) O(1): Removes a value anywhere in the list.
+ 
+ Key points:
+ 1. Linked lists are linear and unidirectional.
+    As soon as you move a reference from one node to another, you can't go back.
+ 2. Linked lists have a O(1) time complexity for head first insertions.
+    Arrays have O(n) time complexity for head-first insertions.
+ 3. Conforming to Swift collection protocols such as Sequence and Collection
+      offers a host of helpful methods for a fairly small amount of requirements.
+ 4. Copy-on-write behavior lets you achieve value semantics.
  */
 
 public struct LinkedList<Value> {
@@ -93,7 +102,8 @@ extension LinkedList: CustomStringConvertible {
   
   @discardableResult
   public mutating func pop() -> Value? {
-    // defer will be garanteed to be executed right before return
+    // defer will be garanteed to be executed no matter how the func returns
+    // defer will be executed after the func returns, but before it completes
     defer {
       head = head?.next
       if isEmpty {
@@ -143,7 +153,10 @@ extension LinkedList: CustomStringConvertible {
     return node.next?.value
   }
   
+  // This method will replace the existing nodes of your linked list with newly allocated ones with the same value.
   private mutating func copyNodes() {
+    // isKnownUniquelyReferenced is a Swift standard library func that
+    //   determines whether or not an object has exactly one reference to it
     guard !isKnownUniquelyReferenced(&head) else {
       return
     }
@@ -168,23 +181,28 @@ extension LinkedList: CustomStringConvertible {
 
 extension LinkedList: Collection {
   
-  // 1
+  // Star index is defined by the head of the list
   public var startIndex: Index {
     return Index(node: head)
   }
-  // 2
+  
+  // The last index should be the index right after the last accessible value
+  // This is like a string in C language
   public var endIndex: Index {
     return Index(node: tail?.next)
   }
-  // 3
+  
+  // Dictates how the index can be incremented
   public func index(after i: Index) -> Index {
     return Index(node: i.node?.next)
   }
-  // 4
+  
+  // The subscript is used to map an Index to the value in the collection
   public subscript(position: Index) -> Value {
     return position.node!.value
   }
   
+  // Custom Index
   public struct Index: Comparable {
     
     public var node: Node<Value>?
