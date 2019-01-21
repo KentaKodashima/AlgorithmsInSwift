@@ -29,13 +29,17 @@ var tree: BinaryNode<Int> = {
 
 print(tree)
 
-// Your code here
-func height(of binaryNode: BinaryNode<Int>) {
-  height(of: binaryNode.leftChild!)
-  if binaryNode.leftChild == nil {
-    print(binaryNode.value)
+// O(n) Algorithm to get the height of a binary node tree
+func height<T>(of node: BinaryNode<T>?) -> Int {
+  
+  // If the node is nil, return -1
+  guard let node = node else {
+    return -1
   }
+  
+  // max<T>(_ x: T, _ y: T) returns the greater of two comparable values.
+  return 1 + max(height(of: tree.leftChild), height(of: tree.rightChild))
 }
- height(of: tree)
+ print(height(of: tree))
 
 //: [Next Challenge](@next)
