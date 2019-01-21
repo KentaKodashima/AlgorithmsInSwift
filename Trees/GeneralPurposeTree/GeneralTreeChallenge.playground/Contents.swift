@@ -47,4 +47,29 @@ twenty.add(five2)
 twenty.add(seven)
 
 // Your solution here
-
+func printEachLevel<T>(for tree: TreeNode<T>) {
+  // Initialize a Queue data structure to facilitate the level order traversal
+  // nodesLeftInCurrentLevel to keep track of
+  //  the number of nodes you'll need to work on before you print a new line.
+  var queue = Queue<TreeNode<T>>()
+  var nodesLeftInCurrentLevel = 0
+  queue.enqueue(tree)
+  
+  // Level-order traversal continues until your queue is empty.
+  while !queue.isEmpty {
+    // Set nodesLeftInCurrentLevel to the current elements in the queue.
+    nodesLeftInCurrentLevel = queue.count
+    
+    while nodesLeftInCurrentLevel > 0 {
+      // Dequeue the first nodesLeftInCurrentLevel number of elements from the queue
+      guard let node = queue.dequeue() else { break }
+      // Every element you dequeue is printed out without establishing a new line
+      print("\(node.value) ", terminator: "")
+      // Enqueue all the children of the node
+      node.children.forEach { queue.enqueue($0) }
+      nodesLeftInCurrentLevel -= 1
+    }
+    // Generate the new line using print()
+    print()
+  }
+}
