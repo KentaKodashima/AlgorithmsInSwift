@@ -35,7 +35,6 @@ extension BinaryNode: CustomStringConvertible {
 }
 
 extension BinaryNode {
-  
   public func traverseInOrder(visit: (Element) -> Void) {
     leftChild?.traverseInOrder(visit: visit)
     visit(value)
