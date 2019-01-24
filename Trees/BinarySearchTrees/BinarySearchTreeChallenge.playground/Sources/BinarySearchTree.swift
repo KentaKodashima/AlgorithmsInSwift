@@ -9,7 +9,6 @@ public struct BinarySearchTree<Element: Comparable> {
 }
 
 extension BinarySearchTree: CustomStringConvertible {
-  
   public var description: String {
     guard let root = root else { return "empty tree" }
     return String(describing: root)
@@ -17,7 +16,6 @@ extension BinarySearchTree: CustomStringConvertible {
 }
 
 extension BinarySearchTree {
-  
   public mutating func insert(_ value: Element) {
     root = insert(from: root, value: value)
   }
